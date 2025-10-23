@@ -1,6 +1,5 @@
 <template>
   <div class="todo-input">
-    <h2>Todo List</h2>
     <input
       v-model="newTodo"
       placeholder="할 일을 입력하세요"
@@ -13,11 +12,52 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      newTodo: "",
+    };
   },
   methods: {
     //이벤트 처리 함수 선언
-    submitTodo() {},
+    submitTodo() {
+      if (this.newTodo.trim() === "") {
+        alert("할일을 입력하세요");
+        return;
+      } else {
+        this.$emit("add-todo", this.newTodo);
+        //상위 component인 App의 addTodo 메서드의 인수로 newTodo 전달하며 호출
+
+        this.newTodo = ""; //newTodo 공백으로 초기화
+      }
+    },
   },
 };
 </script>
+
+<style>
+.todo-input {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.todo-input input {
+  padding: 10px;
+  border: 1px solid saddlebrown;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.todo-input button {
+  padding: 8px 13px;
+  background-color: rgb(199, 157, 157);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.todo-input button:hover {
+  background-color: rgb(212, 168, 168);
+}
+</style>
