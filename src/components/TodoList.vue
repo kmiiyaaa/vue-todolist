@@ -26,7 +26,7 @@ export default {
 .todo-item {
   display: flex;
   justify-content: space-between;
-  background-color: rgb(204, 189, 199);
+  background-color: bisque;
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 10px;
@@ -34,8 +34,8 @@ export default {
 
 .delete {
   padding: 8px 12px;
-  background-color: saddlebrown;
-  color: wheat;
+  background-color: rgb(122, 139, 197);
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 5px;
   cursor: pointer;

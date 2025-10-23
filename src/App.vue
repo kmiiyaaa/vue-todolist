@@ -10,6 +10,7 @@
 <script>
 import TodoInput from "./components/TodoInput.vue";
 import TodoList from "./components/TodoList.vue";
+import api from "./config/axiosConfig";
 
 export default {
   name: "App",
@@ -23,14 +24,38 @@ export default {
       //nextId: 1,
     };
   },
+
+  async created() {
+    //페이지 로딩시에 자동으로 호출
+    await this.loadTodos(); // 페이지가 로딩 될때 새로운 백엔드 팔일 불러오기
+  },
+
   methods: {
-    addTodo(newTodoText) {
-      this.todos.push({
-        id: Date.now(), // 중복되지 않는값 - 현재 시간(밀리세컨초) 으로 처리
-        //id:this.nextId++,  -> id값에 현재 값을 대입한 이후에 1씩 증가, id값 date 쓰지않으려면 이렇게 처리한다.
-        content: newTodoText,
-      });
+    async loadTodos() {
+      // 기존의 할일 리스트 가져오기
+      try {
+        const res = await api.get("/todos"); //백엔드에 모든 할일 리스트 가져오기 호출
+        this.todos = res.data;
+      } catch (err) {
+        console.error("리스트 불러오기 실패!", err);
+      }
     },
+
+    async addTodo(newTodoText) {
+      //새 할일 쓰기
+      try {
+        const res = await api.post("/todos", { content: newTodoText });
+        this.todos.push(res.data);
+      } catch (err) {
+        console.error("할일 추가 실패", err);
+      }
+      // this.todos.push({
+      //   id: Date.now(), // 중복되지 않는값 - 현재 시간(밀리세컨초) 으로 처리
+      //   //id:this.nextId++,  -> id값에 현재 값을 대입한 이후에 1씩 증가, id값 date 쓰지않으려면 이렇게 처리한다.
+      //   content: newTodoText,
+      // });
+    },
+
     deleteTodo(id) {
       //id -> todoList에서 넘겨준 todo.id(삭제할 할 일의 id값)
       this.todos = this.todos.filter((todo) => todo.id !== id);
